@@ -1,40 +1,32 @@
 from rest_framework import serializers
-from ...models import Post, Category
+from blog.models import Post, Category
 from accounts.models import Profile
-
-# class PostSerializer(serializers.Serializer):
-#     id = serializers.IntegerField()
-#     title = serializers.CharField(max_length=255)
+from ...models import  Comment
+from blog.api.v1.serializers import PostSerializer
 
 
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ["id", "name"]
 
 
-class PostSerializer(serializers.ModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
     snippet = serializers.ReadOnlyField(source="get_snippet")
     relative_url = serializers.URLField(source="get_absolute_api_url", read_only=True)
     absolute_url = serializers.SerializerMethodField(method_name="get_abs_url")
 
     class Meta:
-        model = Post
+        model = Comment
         fields = [
             "id",
-            "author",
-            "image",
-            "title",
-            "content",
+            "post",
+            "email",
+            "subject",
+            "message",
             "snippet",
-            "category",
-            "status",
             "relative_url",
             "absolute_url",
             "created_date",
-            "published_date",
+            "updated_date",
         ]
-        read_only_fields = ["author"]
+        read_only_fields = ["user"]
 
     def get_abs_url(self, obj):
         request = self.context.get("request")
@@ -49,14 +41,22 @@ class PostSerializer(serializers.ModelSerializer):
             rep.pop("absolute_url", None)
         else:
             rep.pop("content", None)
-        rep["category"] = CategorySerializer(
-            instance.category, context={"request": request}
+        rep["post"] = PostSerializer(
+            instance.post, context={"request": request}
         ).data
-        
+        rep["post"].pop("image",None)
+        rep["post"].pop("category",None)
+        rep["post"].pop("snippet",None)
+        rep["post"].pop("created_date",None)
+        rep["post"].pop("published_date",None)
         return rep
 
     def create(self, validated_data):
-        validated_data["author"] = Profile.objects.get(
+        validated_data["user"] = Profile.objects.get(
             user__id=self.context.get("request").user.id
         )
+        validated_data["name"] = Profile.objects.get(
+            user=self.context.get("request").user.id
+        )
         return super().create(validated_data)
+

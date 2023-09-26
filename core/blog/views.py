@@ -62,17 +62,6 @@ class PostListView(ListView):
     #     return posts
 
 
-
-
-
-
-
-
-
-
-
-''' iman'''
-
 class PostDetailView(View):
     form_class = CommentForm
 
@@ -96,29 +85,6 @@ class PostDetailView(View):
             messages.success(request, 'your comment submitted successfully', 'success')
             return redirect('blog:post-detail', self.post_instance.id)
         return redirect('blog:post-detail', self.post_instance.id)
-'''end iman'''
-
-# class PostDetailView(DetailView):
-#     model = Post
-#     template_name = "blog/blog-single.html"
-
-#     # test
-#     def post(self, request, *args, **kwargs):
-#         post_instance = Post.objects.get(pk=kwargs['pk'])   
-#         form = CommentForm(request.POST)
-#         if form.is_valid():
-#             new_comments = form.save(commit=False)
-#             new_comments.user = request.user
-#             new_comments.post = self.post_instance
-#             new_comments.save()
-#             messages.success(request, 'your comment submitted successfully', 'success')
-#         return render(request , 'blog/blog-single.html')
-
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         context["posts"] = Post.objects.all()
-#         context["comments"] = Comment.objects.all()
-#         return context
 
 
 class PostListApiView(TemplateView):
