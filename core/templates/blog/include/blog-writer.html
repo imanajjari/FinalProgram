@@ -1,0 +1,16 @@
+{%  load static %}
+<div class="single-sidebar-widget user-info-widget">
+    <img style="border-radius: 100%; width: 100px;" src="{{ account.image.url }}" alt="">
+    <a href="#"><h4>{{ account.author }}</h4></a>
+    <p>
+        {#{{ account.bio }}#}
+    </p>
+    <ul class="social-links">
+        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+        <li><a href="#"><i class="fa fa-github"></i></a></li>
+        <li><a href="#"><i class="fa fa-behance"></i></a></li>
+	</ul>
+	<p>
+		{{ account.bio }}	</p>
+</div>
