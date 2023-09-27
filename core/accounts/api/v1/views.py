@@ -41,7 +41,7 @@ class RegistrationApiView(generics.GenericAPIView):
             email_obj = EmailMessage(
                 "email/activation_email.tpl",
                 {"token": token},
-                "admin@admin.com",
+                "iman.najjari9494@gmail.com",
                 to=[email],
             )
             EmailThread(email_obj).start()
@@ -120,13 +120,13 @@ class ProfileApiView(generics.RetrieveUpdateAPIView):
 
 class TestEmailSend(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
-        self.email = "bigdeli.ali3@gmail.com"
+        self.email = "iman.najjari9494@gmail.com"
         user_obj = get_object_or_404(User, email=self.email)
         token = self.get_tokens_for_user(user_obj)
         email_obj = EmailMessage(
             "email/hello.tpl",
             {"token": token},
-            "admin@admin.com",
+            "iman.najjari9494@gmail.com",
             to=[self.email],
         )
         EmailThread(email_obj).start()
@@ -174,7 +174,7 @@ class ActivationResendApiView(generics.GenericAPIView):
         email_obj = EmailMessage(
             "email/activation_email.tpl",
             {"token": token},
-            "admin@admin.com",
+            "iman.najjari9494@gmail.com",
             to=[user_obj.email],
         )
         EmailThread(email_obj).start()
