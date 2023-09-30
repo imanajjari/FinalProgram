@@ -23,6 +23,7 @@ from comment.models import Comment
 from django.contrib import messages
 from comment.forms import CommentForm
 from accounts.models import Profile
+from accounts.models import User
 
 # Create your views here.
 
@@ -43,14 +44,14 @@ class IndexView(TemplateView):
 
 class PostListView(ListView):
     permission_required = "blog.view_post"
-    queryset = Post.objects.all()
+    # queryset = Post.objects.all()
     # model = Post
     context_object_name = "posts"
     # paginate_by = 2
     ordering = "-id"
-    # def get_queryset(self):
-    #     posts = Post.objects.filter(status=True)
-    #     return posts
+    def get_queryset(self):
+        posts = Post.objects.filter(status=True)
+        return posts
 
 
 class PostDetailView(View):
@@ -89,7 +90,8 @@ class PostCreateView(LoginRequiredMixin, CreateView):
     success_url = "/blog/post/"
 
     def form_valid(self, form):
-        form.instance.author = self.request.user
+        profile = Profile.objects.get(user=self.request.user)
+        form.instance.author = profile
         return super().form_valid(form)
 
 

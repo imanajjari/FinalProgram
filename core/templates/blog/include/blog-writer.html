@@ -3,6 +3,7 @@
     <img style="border-radius: 100%; width: 100px;" src="{{ account.image.url }}" alt="">
     <a href="#"><h4>{{ account.author }}</h4></a>
     <p>
+        <a href="{% url 'accounts:profile'  %}" ><button href="" type="button" class="btn btn-primary">my account</button></a>
         {#{{ account.bio }}#}
     </p>
     <ul class="social-links">

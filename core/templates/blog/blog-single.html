@@ -54,7 +54,10 @@
 									{{ post.content|safe }}
                                     </p>
 								</div>
-
+                                {% if request.user.is_authenticated %}
+								<a href="{% url 'blog:post-edit' pk=post.id %}" ><button style="margin: 6px;" type="button" class="btn btn-primary">edite</button></a>
+								<a href="{% url 'blog:post-delete' pk=post.id %}" ><button style="margin: 6px;" type="button" class="btn btn-danger">delete</button></a>
+                                {% endif %}
 							</div>
                             <div class="navigation-area">
 								<div class="row">
@@ -105,12 +108,7 @@
 						</div>
 						<div class="col-lg-4 sidebar-widgets">
 							<div class="widget-wrap">
-								<div class="single-sidebar-widget search-widget">
-									<form class="search-form" action="#">
-			                            <input placeholder="Search Posts" name="search" type="text" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Search Posts'" >
-			                            <button type="submit"><i class="fa fa-search"></i></button>
-			                        </form>
-								</div>
+								
 
                                 {% include 'blog/include/blog-writer.html' %}
                                 {% comment %} {% latestposts %} {% endcomment %}
