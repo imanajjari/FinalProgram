@@ -8,7 +8,7 @@ from accounts.models import Profile
 
 # Create your models here.
 class Comment(models.Model):
-    user = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, null=True, related_name='ucomments')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True, related_name='pcomments')
     name = models.CharField(max_length=255, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)

@@ -22,6 +22,7 @@ from django.views import View
 from comment.models import Comment
 from django.contrib import messages
 from comment.forms import CommentForm
+from accounts.models import Profile
 
 # Create your views here.
 
@@ -32,22 +33,12 @@ class IndexView(TemplateView):
     a class based view to show index page
     """
 
-    template_name = "blog/blog-home.html"
+    template_name = "index.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["posts"] = Post.objects.all()
         return context
-
-class RedirectToMaktab(RedirectView):
-    """
-    Redirection view sample for maktabkhooneh
-    """
-
-    url = "https://maktabkhooneh.com"
-
-    def get_redirect_url(self, *args, **kwargs):
-        return super().get_redirect_url(*args, **kwargs)
 
 
 class PostListView(ListView):
@@ -75,10 +66,11 @@ class PostDetailView(View):
 
 
     def post(self, request, *args, **kwargs):
+        profile = Profile.objects.get(user=request.user)
         form = self.form_class(request.POST)
         if form.is_valid():
             new_comments = form.save(commit=False)
-            new_comments.user = request.user
+            new_comments.user = profile
             new_comments.name = request.user
             new_comments.post = self.post_instance
             new_comments.save()

@@ -38,9 +38,12 @@ schema_view = get_schema_view(
     permission_classes=[permissions.AllowAny],
 )
 
+from django.views.generic import RedirectView
+class indexView(RedirectView):
+    pattern_name = 'blog:index'
 
-def indexView(request):
-    return HttpResponse("<h1>Django Final Test</h1>")
+# def indexView(request):
+#     return HttpResponse("<h1>Django Final Test</h1>")
 
 
 urlpatterns = [
@@ -48,7 +51,7 @@ urlpatterns = [
     path("api-auth/", include("rest_framework.urls")),
     path("accounts/", include("accounts.urls")),
     path("comment/", include("comment.urls")),
-    path("", indexView, name="index"),
+    path("", indexView.as_view(), name="index"),
     path("blog/", include("blog.urls")),
     # path('api-docs/',include_docs_urls(title='api sample')),
     path(
