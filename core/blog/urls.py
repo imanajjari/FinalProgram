@@ -7,7 +7,6 @@ app_name = "blog"
 
 urlpatterns = [
     path("", views.IndexView.as_view(), name="index"),
-    # path('go-to-maktabkhooneh', views.RedirectToMaktab.as_view(), name='redirect-to-maktabkhooneh'),
     path("post/", views.PostListView.as_view(), name="post-list"),
     path("post/api/", views.PostListApiView.as_view(), name="post-list-api"),
     path("post/<int:pk>/", views.PostDetailView.as_view(), name="post-detail"),
@@ -19,4 +18,7 @@ urlpatterns = [
         name="post-delete",
     ),
     path("api/v1/", include("blog.api.v1.urls")),
+
+    # Cache
+    path("test/", views.test, name="test"),
 ]

@@ -8,7 +8,9 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
 )
-from django.http import HttpResponse
+from django.core.cache import cache
+from django.views.decorators.cache import cache_page
+from django.http import HttpResponse, JsonResponse
 from .models import Post
 from django.shortcuts import get_object_or_404
 from .forms import PostForm
@@ -24,7 +26,7 @@ from django.contrib import messages
 from comment.forms import CommentForm
 from accounts.models import Profile
 from accounts.models import User
-
+import requests
 # Create your views here.
 
 # Function Base View show a template
@@ -104,3 +106,27 @@ class PostEditView(LoginRequiredMixin, UpdateView):
 class PostDeleteView(LoginRequiredMixin, DeleteView):
     model = Post
     success_url = "/blog/post/"
+
+# @cache_page(60)
+# def test(request):
+#     response = requests.get("https://5add16cb-13b5-4c3e-ac48-635ec4f8654b.mock.pstmn.io/test/delay/20")
+#     return JsonResponse(response.json())
+
+@cache_page(1200)
+def test(request):
+    api_key = 'c10cf61f23551c490fe69ca601a58502'
+    city_name = 'Tehran'
+    url = f"http://api.openweathermap.org/data/2.5/weather?q={city_name}&appid={api_key}&units=metric"
+
+    response = requests.get(url)
+    data = response.json()
+
+    if data['cod'] == 200:
+        temperature = data['main']['temp']
+        weather_description = data['weather'][0]['description']
+        print(f"The temperature in {city_name} is {temperature} degrees Celsius with {weather_description}.")
+        return JsonResponse(response.json())
+    else:
+        return HttpResponse("Failed to retrieve weather data.")
+
+    
